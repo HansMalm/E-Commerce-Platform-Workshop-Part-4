@@ -4,6 +4,13 @@ A **Spring Boot + Spring Data JPA** backend project that demonstrates **One-to-O
 
 ---
 
+## 📌 Workshop Document
+
+You can find the workshop description here:
+
+[Workshop Document](SpringBoot-DataJPA-Workshop-Part1.md)
+
+---
 ## 📌 Workshop Overview
 
 This project is part of a JPA workshop focused on building the **foundation of an E-commerce system**, including:
