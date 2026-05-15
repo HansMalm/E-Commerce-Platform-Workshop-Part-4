@@ -27,6 +27,16 @@ public class Customer {
 
     private Instant createdAt;
 
+    // Unidirectional One-to-One (Address)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
+
+    // Bidirectional One-to-One (UserProfile)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "profile_id")
+    private UserProfile profile;
+    
     @PrePersist
     public void prePersist() {
         this.createdAt = Instant.now();
