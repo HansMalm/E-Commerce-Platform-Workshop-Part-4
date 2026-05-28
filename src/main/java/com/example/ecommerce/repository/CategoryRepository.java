@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+    /* Required Queries */
     // Find a category by name (case-insensitive)
     Optional<Category> findByNameIgnoreCase(String name);
 
