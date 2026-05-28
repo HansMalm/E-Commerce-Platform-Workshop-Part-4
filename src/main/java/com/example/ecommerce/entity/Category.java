@@ -27,4 +27,8 @@ public class Category {
     )
     private List<Product> products = new ArrayList<>();
 
+    public void addProduct(Product product) {
+        products.add(product);
+        product.setCategory(this);
+    }
 }
