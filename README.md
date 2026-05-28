@@ -1,4 +1,4 @@
-# 🛒 E-Commerce Platform (JPA Workshop - Part 1)
+# 🛒 E-Commerce Platform (JPA Workshop - Part 2)
 
 A **Spring Boot + Spring Data JPA** backend project that demonstrates **One-to-One entity relationships**, repository queries, and database initialization using `CommandLineRunner`.
 
@@ -8,7 +8,7 @@ A **Spring Boot + Spring Data JPA** backend project that demonstrates **One-to-O
 
 You can find the workshop description here:
 
-[Workshop Document](SpringBoot-DataJPA-Workshop-Part1.md)
+[Workshop Document](SpringBoot-DataJPA-Workshop-Part2.md)
 
 ---
 ## 📌 Workshop Overview
