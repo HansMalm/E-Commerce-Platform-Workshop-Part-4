@@ -20,10 +20,11 @@ public class Order {
 
     private Instant orderDate;
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    // Unidirectional One-to-One (Customer)
-    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
+    // Many-to-One (Order)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
@@ -37,6 +38,9 @@ public class Order {
 
     @PrePersist
     public void prePersist() {
-        this.orderDate = Instant.now();
+        if (this.orderDate == null) {
+            this.orderDate = Instant.now();
+        }
     }
+
 }
