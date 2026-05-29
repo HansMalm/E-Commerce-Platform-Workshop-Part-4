@@ -1,25 +1,74 @@
-# 🛒 E-Commerce Platform (JPA Workshop - Part 2)
+# 🛒 E-Commerce Platform (JPA Workshop - Part 1 & Part 2)
 
-A **Spring Boot + Spring Data JPA** backend project that demonstrates **One-to-One entity relationships**, repository queries, and database initialization using `CommandLineRunner`.
+A **Spring Boot + Spring Data JPA** backend project that demonstrates **Entity relationships**, repository queries, and database initialization using `CommandLineRunner`.
+
+---
+## 🚀 Latest Update: Part 2 Completed
+
+This project has been extended with **E-commerce Platform JPA (Part 2)**, adding full catalog management, ordering system, and advanced Spring Data JPA features.
 
 ---
 
-## 📌 Workshop Document
+## 🆕 Part 2 Highlights
 
-You can find the workshop description here:
+In this extension, the system now supports a complete **E-commerce workflow**, including:
 
-[Workshop Document](SpringBoot-DataJPA-Workshop-Part2.md)
+### 📦 Catalog Management
+- Category → Product (One-to-Many)
+- Product image handling
+- Product search and filtering
+
+### 🏷️ Promotions System
+- Many-to-Many relationship between Product and Promotion
+- Time-based active promotions
+- Join table: `tbl_products_promotions`
+
+### 🧾 Order Management System
+- Customer → Order (Many-to-One)
+- Order → OrderItems (One-to-Many)
+- Product → OrderItem relationship
+- Order status lifecycle (CREATED, PAID, SHIPPED, CANCELLED)
+
+### 👤 Customer Enhancements (from Part 1)
+- Customer entity reused
+- One-to-One relationships:
+    - Address
+    - UserProfile
+
+### ⚡ Advanced Spring Data JPA Features
+- Derived query methods
+- Custom JPQL queries
+- EntityGraph / JOIN FETCH to avoid N+1 problem
+- Nested property queries (e.g., `findByCategory_Name`)
+
+### 🌱 Data Seeding
+- Automatic database initialization using `CommandLineRunner`
+- Seeded data includes:
+    - Customers
+    - Addresses
+    - User Profiles
+    - Categories
+    - Products
+    - Orders + OrderItems
+- Duplicate-safe seeding logic
 
 ---
-## 📌 Workshop Overview
 
-This project is part of a JPA workshop focused on building the **foundation of an E-commerce system**, including:
+## 🧠 Key Learning Outcomes
 
-- Customer management
-- Address information (One-to-One)
-- User profile data (One-to-One)
-- Derived query methods in Spring Data JPA
-- Database initialization and testing via console output
+- Designing full relational database models in JPA
+- Handling complex entity relationships (1–1, 1–M, M–M)
+- Writing derived query methods in Spring Data JPA
+- Using JPQL for advanced queries
+- Solving N+1 performance problems
+- Implementing application-level data initialization
+
+---
+
+## 📌 Workshop Documents
+
+[Workshop Document - Part 2](SpringBoot-DataJPA-Workshop-Part2.md)
+[Workshop Document - Part 1](SpringBoot-DataJPA-Workshop-Part1.md)
 
 ---
 
@@ -37,10 +86,34 @@ This project is part of a JPA workshop focused on building the **foundation of a
 
 ## 📂 Project Structure
 
-- `entity/` → JPA entities (Customer, Address, UserProfile)
-- `repository/` → Spring Data JPA repositories
-- `config/` → DataInitializer (test data runner)
-
+```
+com.example.ecommerce
+├── entity
+│   ├── Customer
+│   ├── Address
+│   ├── UserProfile
+│   ├── Category
+│   ├── Product
+│   ├── Promotion
+│   ├── Order
+│   ├── OrderItem
+│   └── OrderStatus
+├── repository
+│   ├── CustomerRepository
+│   ├── CategoryRepository
+│   ├── ProductRepository
+│   ├── OrderRepository
+│   ├── OrderItemRepository
+│   └── PromotionRepository
+├── service
+│   ├── seeder
+│   │     └── DataSeederService
+│   └── report
+│         └── ReportService
+├── runner
+│   └── AppRunner   (CommandLineRunner entry point)
+└── JpaEcommerceSystemApplication
+```
 ---
 
 ## 🚀 How to Run
@@ -75,35 +148,48 @@ JpaEcommerceSystemApplication.java
 ## ⚡ Expected Output :
 
 ```
-===== DATA INSERTED SUCCESSFULLY =====
+INITIAL PRODUCT STOCK:
+==========================================================
+                       PRODUCT CATALOG                    
+==========================================================
+ID    Product Name         Category        Price      Stock 
+----------------------------------------------------------
+1     Laptop               Electronics     1000.00    98    
+2     Phone                Electronics     800.00     50    
+3     Java Book            Books           50.00      88    
+4     Spring Book          Books           60.00      20    
+5     Headphones           Electronics     200.00     66    
+==========================================================
 
-Jayani Athukorala | jayani@email.com | Gothenburg
-John Doe | john.doe@email.com | Stockholm
-Anna Smith | anna.smith@email.com | Gothenburg
+ORDER 1:
+============================================
+                ORDER RECEIPT              
+============================================
+Order ID   : 1
+Date       : 2026-05-29T12:48:51.329447Z
+Status     : PAID
+Customer   : Jayani A
+Email      : j1@mail.com
+--------------------------------------------
+Product         Qty   Price      Total     
+--------------------------------------------
+Laptop          2     1000.00    2000.00   
+--------------------------------------------
+TOTAL: 2000.00
+============================================
 
---- Find by email ---
-Name: John Doe | Email: john.doe@email.com | City: Stockholm | Nickname: johnny
-
---- Find by last name ---
-Name: Anna Smith | Email: anna.smith@email.com | City: Gothenburg | Nickname: anna
-
---- Find by city ---
-Name: Jayani Athukorala | Email: jayani@email.com | City: Gothenburg | Nickname: jayani
-Name: Anna Smith | Email: anna.smith@email.com | City: Gothenburg | Nickname: anna
-
---- Email contains ---
-Name: John Doe | Email: john.doe@email.com | City: Stockholm | Nickname: johnny
-
---- Created after now-1 hour ---
-Name: Jayani Athukorala | Email: jayani@email.com | City: Gothenburg | Nickname: jayani
-Name: John Doe | Email: john.doe@email.com | City: Stockholm | Nickname: johnny
-Name: Anna Smith | Email: anna.smith@email.com | City: Gothenburg | Nickname: anna
-
---- Count by city ---
-2
-
---- Exists by email ---
-true
+FINAL PRODUCT STOCK:
+==========================================================
+                       PRODUCT CATALOG                    
+==========================================================
+ID    Product              Category        Price      Stock 
+----------------------------------------------------------
+1     Laptop               Electronics     1000.00    98    
+2     Phone                Electronics     800.00     50    
+3     Java Book            Books           50.00      88    
+4     Spring Book          Books           60.00      20    
+5     Headphones           Electronics     200.00     66    
+==========================================================
 ```
 
 ---

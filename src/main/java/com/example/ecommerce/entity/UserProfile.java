@@ -1,13 +1,17 @@
 package com.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "tbl_user_profiles")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserProfile {
 
     @Id
@@ -26,4 +30,5 @@ public class UserProfile {
     // Inverse side
     @OneToOne(mappedBy = "profile")
     private Customer customer;
+
 }

@@ -21,6 +21,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     // Find categories whose name contains a given keyword
     List<Category> findByNameContainingIgnoreCase(String keyword);
 
+    Optional<Category> findByName(String name);
+
     // Count how many categories exist
     // count() is inherited from JpaRepository
 }

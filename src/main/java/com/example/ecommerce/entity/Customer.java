@@ -1,7 +1,9 @@
 package com.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
@@ -10,6 +12,8 @@ import java.time.Instant;
 @Table(name = "tbl_customers")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
     @Id
@@ -36,7 +40,7 @@ public class Customer {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "profile_id")
     private UserProfile profile;
-    
+
     @PrePersist
     public void prePersist() {
         this.createdAt = Instant.now();

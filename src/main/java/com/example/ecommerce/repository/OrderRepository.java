@@ -45,4 +45,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     // Find orders by customer ID and status.
     List<Order> findByCustomer_IdAndStatus(Long customerId, OrderStatus orderStatus);
+
+    @EntityGraph(attributePaths = {"customer", "items", "items.product"})
+    List<Order> findAll();
 }

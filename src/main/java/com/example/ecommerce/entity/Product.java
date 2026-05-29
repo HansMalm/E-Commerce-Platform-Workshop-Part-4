@@ -1,7 +1,9 @@
 package com.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -14,6 +16,8 @@ import java.util.Set;
 @Table (name = "tbl_products")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @Id
@@ -22,6 +26,7 @@ public class Product {
 
     private String name;
 
+    private Integer stock;
 
     @ElementCollection
     @CollectionTable(name = "tbl_product_images", joinColumns = @JoinColumn(name = "product_id"))
