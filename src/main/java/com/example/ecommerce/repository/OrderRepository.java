@@ -2,7 +2,6 @@ package com.example.ecommerce.repository;
 
 import com.example.ecommerce.entity.Order;
 import com.example.ecommerce.entity.OrderStatus;
-import com.example.ecommerce.entity.Product;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
