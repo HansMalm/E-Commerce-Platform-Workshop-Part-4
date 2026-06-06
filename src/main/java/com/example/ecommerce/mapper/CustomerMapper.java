@@ -5,11 +5,14 @@ import com.example.ecommerce.dto.response.AddressResponse;
 import com.example.ecommerce.dto.response.CustomerResponse;
 import com.example.ecommerce.entity.Address;
 import com.example.ecommerce.entity.Customer;
+import org.springframework.stereotype.Component;
 
+@Component // Manage the mapper as a bean and inject it into other classes
 public class CustomerMapper {
 
     public CustomerResponse toResponse(Customer customer){
 
+        if(customer == null) throw new IllegalArgumentException("Customer cannot be null!");
         AddressResponse addressResponse = null;
         if(customer.getAddress() != null){
             addressResponse = new AddressResponse(
@@ -30,6 +33,7 @@ public class CustomerMapper {
 
     public Customer toEntity(CustomerRequest customerRequest){
 
+        if(customerRequest == null) throw new IllegalArgumentException("CustomerRequest cannot be null!");
         Address address = new Address();
         address.setStreet(customerRequest.street());
         address.setCity(customerRequest.city());
@@ -39,6 +43,7 @@ public class CustomerMapper {
         customer.setFirstName(customerRequest.firstName());
         customer.setLastName(customerRequest.lastName());
         customer.setEmail(customerRequest.email());
+        customer.setPassword(customerRequest.password());
         customer.setAddress(address);
         return customer;
     }

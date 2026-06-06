@@ -14,8 +14,7 @@ public record CustomerRequest(
         String lastName,
 
         @NotBlank(message = "Email cannot be empty!")
-        @Size(min = 10, max = 100)
-        @Email
+        @Email(message = "Invalid email format!")
         String email,
 
         @NotBlank(message = "Password cannot be empty!")
