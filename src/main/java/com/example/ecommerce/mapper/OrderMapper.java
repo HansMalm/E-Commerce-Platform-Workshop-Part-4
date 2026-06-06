@@ -1,14 +1,17 @@
 package com.example.ecommerce.mapper;
 
+import com.example.ecommerce.dto.request.OrderItemRequest;
 import com.example.ecommerce.dto.request.OrderRequest;
 import com.example.ecommerce.dto.response.OrderItemResponse;
 import com.example.ecommerce.dto.response.OrderResponse;
 import com.example.ecommerce.entity.Customer;
 import com.example.ecommerce.entity.Order;
 import com.example.ecommerce.entity.OrderItem;
+import com.example.ecommerce.entity.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class OrderMapper {
@@ -44,11 +47,31 @@ public class OrderMapper {
         );
     }
 
-    public Order toEntity(OrderRequest orderRequest, Customer customer){
-        if(orderRequest == null) throw new IllegalArgumentException("Order Request cannot be null!");
+    public Order toEntity(OrderRequest request,
+                          Customer customer,
+                          Map<Long, Product> productMap) {
 
         Order order = new Order();
         order.setCustomer(customer);
+
+        List<OrderItem> items = request.items()
+                .stream()
+                .map(itemReq -> toOrderItem(itemReq, productMap.get(itemReq.productId())))
+                .toList();
+
+        order.setItems(items);
+
         return order;
+    }
+
+    private OrderItem toOrderItem(OrderItemRequest req, Product product) {
+
+        OrderItem item = new OrderItem();
+        item.setProduct(product);
+        item.setQuantity(req.quantity());
+        // Capture the current price of the product as priceAtPurchase.
+        item.setPriceAtPurchase(product.getPrice());
+
+        return item;
     }
 }
