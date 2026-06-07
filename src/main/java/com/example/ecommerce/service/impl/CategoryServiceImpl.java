@@ -8,6 +8,7 @@ import com.example.ecommerce.mapper.CategoryMapper;
 import com.example.ecommerce.repository.CategoryRepository;
 import com.example.ecommerce.service.CategoryService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryResponse create(String name) {
         if(name == null || name.isBlank()) throw new IllegalArgumentException("Category name cannot be null!");
 
@@ -40,6 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CategoryResponse> findAll() {
 
         return categoryRepository.findAll()

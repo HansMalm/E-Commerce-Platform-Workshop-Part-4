@@ -35,7 +35,8 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryRepository.findById(productRequest.categoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category cannot found with "+ productRequest.categoryId()));
 
-        Product product = productMapper.toEntity(productRequest, category);
+        Product product = productMapper.toEntity(productRequest);
+        product.setCategory(category);
         Product savedProduct = productRepository.save(product);
 
         return productMapper.toResponse(savedProduct);

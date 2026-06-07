@@ -13,12 +13,13 @@ import com.example.ecommerce.repository.CustomerRepository;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.service.OrderService;
-import org.antlr.v4.runtime.RecognitionException;
+import com.example.ecommerce.service.PromotionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -26,16 +27,19 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
+    private final PromotionService promotionService;
     private final OrderMapper orderMapper;
 
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, ProductRepository productRepository, OrderMapper orderMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, ProductRepository productRepository, PromotionService promotionService, OrderMapper orderMapper) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.productRepository = productRepository;
+        this.promotionService = promotionService;
         this.orderMapper = orderMapper;
     }
 
     @Override
+    @Transactional
     public OrderResponse placeOrder(OrderRequest orderRequest) {
         if (orderRequest == null) throw new IllegalArgumentException("OrderRequest cannot be null!");
 
@@ -43,20 +47,47 @@ public class OrderServiceImpl implements OrderService {
         Customer customer = customerRepository.findById(orderRequest.customerId())
                 .orElseThrow(()-> new ResourceNotFoundException("Customer not found with id "+orderRequest.customerId()));
 
-        // Find the Product for each requested item
-        List<Product> products = productRepository.findAllById(
-                orderRequest.items().stream()
-                        .map(OrderItemRequest::productId)
-                        .toList()
-        );
+        Order order = new Order();
+        order.setCustomer(customer);
 
-        Map<Long, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getId, p -> p));
+        List<OrderItem> orderItems = new ArrayList<>();
 
-        // Apply any active Promotions (optional).
+        for (OrderItemRequest itemRequest : orderRequest.items()) {
+
+            // Find the Product for each requested item
+            Product product = productRepository.findById(itemRequest.productId())
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException(
+                                    "Product not found with id " + itemRequest.productId()));
+
+            // Stock validation
+            if (product.getStock() < itemRequest.quantity()) {
+                throw new IllegalArgumentException(
+                        "Insufficient stock for product with id " + product.getName());
+            }
+
+            // Apply any active Promotion.
+            BigDecimal discountPrice = promotionService.calculateDiscount(product);
+
+            BigDecimal finalPrice = product.getPrice()
+                    .subtract(discountPrice);
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setQuantity(itemRequest.quantity());
+            orderItem.setPriceAtPurchase(finalPrice);
+            orderItem.setOrder(order);
+
+            orderItems.add(orderItem);
+
+            // Stock update
+            product.setStock(product.getStock() - itemRequest.quantity());
+        }
+
         // Save the Order with its items.
-        Order order = orderMapper.toEntity(orderRequest, customer, productMap);
+        order.setItems(orderItems);
         Order savedOrder = orderRepository.save(order);
+
         return orderMapper.toResponse(savedOrder);
-    }
+     }
 }

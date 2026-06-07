@@ -19,14 +19,13 @@ public class ProductMapper {
         );
     }
 
-    public Product toEntity(ProductRequest productRequest, Category category){
+    public Product toEntity(ProductRequest productRequest){
 
         if(productRequest == null) throw new IllegalArgumentException("ProductRequest cannot be null!");
 
         Product product = new Product();
         product.setName(productRequest.name());
         product.setPrice(productRequest.price());
-        product.setCategory(category);
 
         return product;
     }
