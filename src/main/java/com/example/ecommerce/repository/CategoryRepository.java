@@ -15,7 +15,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByNameIgnoreCase(String name);
 
     // Check if a category exists by name
-    boolean existsAllByNameIgnoreCase(String name);
+    boolean existsByNameIgnoreCase(String name);
 
     /* Advanced Queries */
     // Find categories whose name contains a given keyword
