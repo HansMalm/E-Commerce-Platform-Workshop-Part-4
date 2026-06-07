@@ -133,9 +133,7 @@ com.example.ecommerce
 │   ├── CustomerService
 │   ├── ProductService
 │   ├── OrderService
-│   ├── PromotionService
-│   ├── seeder
-│   └── report
+│   └── PromotionService
 ├── dto
 │   ├── request
 │   └── response
