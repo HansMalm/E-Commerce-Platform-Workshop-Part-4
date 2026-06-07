@@ -14,6 +14,7 @@ import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.service.OrderService;
 import com.example.ecommerce.service.PromotionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -29,14 +31,6 @@ public class OrderServiceImpl implements OrderService {
     private final ProductRepository productRepository;
     private final PromotionService promotionService;
     private final OrderMapper orderMapper;
-
-    public OrderServiceImpl(OrderRepository orderRepository, CustomerRepository customerRepository, ProductRepository productRepository, PromotionService promotionService, OrderMapper orderMapper) {
-        this.orderRepository = orderRepository;
-        this.customerRepository = customerRepository;
-        this.productRepository = productRepository;
-        this.promotionService = promotionService;
-        this.orderMapper = orderMapper;
-    }
 
     @Override
     @Transactional

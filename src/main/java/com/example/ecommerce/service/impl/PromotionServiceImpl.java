@@ -6,6 +6,7 @@ import com.example.ecommerce.entity.Promotion;
 import com.example.ecommerce.mapper.PromotionMapper;
 import com.example.ecommerce.repository.PromotionRepository;
 import com.example.ecommerce.service.PromotionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,15 +15,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
 
     private final PromotionRepository promotionRepository;
     private final PromotionMapper promotionMapper;
-
-    public PromotionServiceImpl(PromotionRepository promotionRepository, PromotionMapper promotionMapper) {
-        this.promotionRepository = promotionRepository;
-        this.promotionMapper = promotionMapper;
-    }
 
     @Override
     @Transactional(readOnly = true)

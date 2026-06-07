@@ -9,19 +9,16 @@ import com.example.ecommerce.exception.ResourceNotFoundException;
 import com.example.ecommerce.mapper.CustomerMapper;
 import com.example.ecommerce.repository.CustomerRepository;
 import com.example.ecommerce.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
-
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
-        this.customerRepository = customerRepository;
-        this.customerMapper = customerMapper;
-    }
 
     @Override
     @Transactional
