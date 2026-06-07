@@ -1,67 +1,102 @@
-# 🛒 E-Commerce Platform (JPA Workshop - 3)
+# 🛒 E-Commerce Platform (Spring Boot + JPA) Part3
 
-A **Spring Boot + Spring Data JPA** backend project that demonstrates **Entity relationships**, repository queries, and database initialization using `CommandLineRunner`.
-
----
-## 🚀 Latest Update: Part 2 Completed
-
-This project has been extended with **E-commerce Platform JPA (Part 2)**, adding full catalog management, ordering system, and advanced Spring Data JPA features.
+A **Spring Boot + Spring Data JPA backend system** implementing a full e-commerce workflow using a **clean layered architecture** with DTOs, services, and mappers.
 
 ---
+## 🚀 Project Overview
 
-## 🆕 Part 2 Highlights
+This project demonstrates how to build a scalable backend system using Spring Boot with a strong focus on **clean architecture and separation of concerns**.
 
-In this extension, the system now supports a complete **E-commerce workflow**, including:
+The system models a complete e-commerce flow including:
 
-### 📦 Catalog Management
-- Category → Product (One-to-Many)
-- Product image handling
-- Product search and filtering
+- Customer management
+- Product catalog with categories
+- Promotion-based pricing
+- Order processing with stock validation
 
-### 🏷️ Promotions System
-- Many-to-Many relationship between Product and Promotion
+It emphasizes **business logic encapsulation inside service layers**, while keeping entities and repositories isolated from the API layer.
+
+---
+
+## 🧱 Architecture
+
+The project follows a layered architecture:
+
+```
+Service Layer (business logic)
+        ↓
+Mapper Layer (DTO ↔ Entity conversion)
+        ↓
+Repository Layer (data access)
+        ↓
+Database
+```
+### Key Design Principles
+
+- Entities are not exposed outside the service layer
+- DTOs are used for all input/output operations
+- Business logic is centralized in services
+- Mappers handle all transformations
+- Transactions ensure consistency in order processing
+
+---
+
+## ⚙️ Core Features
+
+### 👤 Customer Management
+
+- Register customer with validation
+- Fetch and update customer data
+- Email uniqueness enforcement
+
+### 📦 Product Catalog
+
+- Create products with category validation
+- Search products by name
+- Manage stock and pricing
+
+### 🏷️ Category Management
+
+- Organize products into categories
+- Prevent duplicate categories
+
+### 🎯 Promotion System
+
 - Time-based active promotions
-- Join table: `tbl_products_promotions`
+- Best discount selection per product
+- Discount applied during order processing
 
-### 🧾 Order Management System
-- Customer → Order (Many-to-One)
-- Order → OrderItems (One-to-Many)
-- Product → OrderItem relationship
-- Order status lifecycle (CREATED, PAID, SHIPPED, CANCELLED)
+### 🧾 Order Processing
 
-### 👤 Customer Enhancements (from Part 1)
-- Customer entity reused
-- One-to-One relationships:
-    - Address
-    - UserProfile
+- Place orders with multiple items
+- Stock validation before purchase
+- Promotion-based discount calculation
+- Price snapshot at purchase time
+- Fully transactional order creation
 
-### ⚡ Advanced Spring Data JPA Features
-- Derived query methods
-- Custom JPQL queries
-- EntityGraph / JOIN FETCH to avoid N+1 problem
-- Nested property queries (e.g., `findByCategory_Name`)
+---
+## 🔄 Business Flow
 
-### 🌱 Data Seeding
-- Automatic database initialization using `CommandLineRunner`
-- Seeded data includes:
-    - Customers
-    - Addresses
-    - User Profiles
-    - Categories
-    - Products
-    - Orders + OrderItems
-- Duplicate-safe seeding logic
+- Customer places order
+- System validates customer and products
+- Stock availability is checked
+- Active promotions are evaluated
+- Discount is calculated via PromotionService
+- Order + OrderItems are created
+- Stock is updated
+- Transaction commits
 
 ---
 
 ## 🧠 Key Learning Outcomes
 
-- Designing full relational database models in JPA
-- Handling complex entity relationships (1–1, 1–M, M–M)
-- Writing derived query methods in Spring Data JPA
-- Using JPQL for advanced queries
-- Solving N+1 performance problems
-- Implementing application-level data initialization
+- Designing layered Spring Boot architecture
+- Using DTOs (Java Records) for API safety
+- Implementing service-based business logic
+- Writing reusable mapper components
+- Handling complex order workflows
+- Applying `@Transactional` for consistency
+- Managing `Many-to-Many` relationships (Products ↔ Promotions)
 
 ---
 
@@ -76,7 +111,7 @@ In this extension, the system now supports a complete **E-commerce workflow**, i
 
 ## 🧱 Tech Stack
 
-- Java 17+
+- Java 21
 - Spring Boot
 - Spring Data JPA
 - MySQL
@@ -86,113 +121,37 @@ In this extension, the system now supports a complete **E-commerce workflow**, i
 
 ---
 
-## 📂 Project Structure
+## 📂 Updated Project Structure
 
 ```
 com.example.ecommerce
 ├── entity
-│   ├── Customer
-│   ├── Address
-│   ├── UserProfile
-│   ├── Category
-│   ├── Product
-│   ├── Promotion
-│   ├── Order
-│   ├── OrderItem
-│   └── OrderStatus
+├── exception
 ├── repository
-│   ├── CustomerRepository
-│   ├── CategoryRepository
-│   ├── ProductRepository
-│   ├── OrderRepository
-│   ├── OrderItemRepository
-│   └── PromotionRepository
 ├── service
+│   ├── impl
+│   ├── CustomerService
+│   ├── ProductService
+│   ├── OrderService
+│   ├── PromotionService
 │   ├── seeder
-│   │     └── DataSeederService
 │   └── report
-│         └── ReportService
+├── dto
+│   ├── request
+│   └── response
+├── mapper
 ├── runner
-│   └── AppRunner   (CommandLineRunner entry point)
 └── JpaEcommerceSystemApplication
 ```
 ---
 
 ## 🚀 How to Run
 
-### 1. Clone the repository
-```bash
+```
 git clone https://github.com/jayani-athukorala/jpa-ecommerce-system.git
 cd jpa-ecommerce-system
 
-```
-### 2. Configure Database
-
-```bash
 docker compose up -d
-```
-
-### 3. Build the project
-```bash
 mvn clean install
-```
-
-4. Run the application
-```bash
 mvn spring-boot:run
 ```
-
-OR run the main class:
-```bash
-JpaEcommerceSystemApplication.java
-```
-
-## ⚡ Expected Output :
-
-```
-INITIAL PRODUCT STOCK:
-==========================================================
-                       PRODUCT CATALOG                    
-==========================================================
-ID    Product Name         Category        Price      Stock 
-----------------------------------------------------------
-1     Laptop               Electronics     1000.00    98    
-2     Phone                Electronics     800.00     50    
-3     Java Book            Books           50.00      88    
-4     Spring Book          Books           60.00      20    
-5     Headphones           Electronics     200.00     66    
-==========================================================
-
-ORDER 1:
-============================================
-                ORDER RECEIPT              
-============================================
-Order ID   : 1
-Date       : 2026-05-29T12:48:51.329447Z
-Status     : PAID
-Customer   : Jayani A
-Email      : j1@mail.com
---------------------------------------------
-Product         Qty   Price      Total     
---------------------------------------------
-Laptop          2     1000.00    2000.00   
---------------------------------------------
-TOTAL: 2000.00
-============================================
-
-FINAL PRODUCT STOCK:
-==========================================================
-                       PRODUCT CATALOG                    
-==========================================================
-ID    Product              Category        Price      Stock 
-----------------------------------------------------------
-1     Laptop               Electronics     1000.00    98    
-2     Phone                Electronics     800.00     50    
-3     Java Book            Books           50.00      88    
-4     Spring Book          Books           60.00      20    
-5     Headphones           Electronics     200.00     66    
-==========================================================
-```
-
----
-

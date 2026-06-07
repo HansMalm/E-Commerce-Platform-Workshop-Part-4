@@ -69,8 +69,7 @@ public class OrderServiceImpl implements OrderService {
             // Apply any active Promotion.
             BigDecimal discountPrice = promotionService.calculateDiscount(product);
 
-            BigDecimal finalPrice = product.getPrice()
-                    .subtract(discountPrice);
+            BigDecimal finalPrice = product.getPrice().subtract(discountPrice);
 
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
