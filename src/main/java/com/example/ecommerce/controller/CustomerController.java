@@ -18,7 +18,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<CustomerResponse> create(@Valid @RequestBody CustomerRequest customerRequest){
+    public ResponseEntity<CustomerResponse> register(@Valid @RequestBody CustomerRequest customerRequest){
         IO.println("Request body: "+customerRequest);
 
         CustomerResponse customerResponse = customerService.register(customerRequest);
