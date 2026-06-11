@@ -1,20 +1,17 @@
-# 🛒 E-Commerce Platform (Spring Boot + JPA) Part3
+# 🛒 E-Commerce Platform (Spring Boot + JPA + RestAPI) Part4
 
-A **Spring Boot + Spring Data JPA backend system** implementing a full e-commerce workflow using a **clean layered architecture** with DTOs, services, and mappers.
+A **Spring Boot + Spring Data JPA backend system** implementing a full e-commerce workflow using a **clean layered architecture** with controllers, DTOs, services, and mappers.
 
 ---
 ## 🚀 Project Overview
 
-This project demonstrates how to build a scalable backend system using Spring Boot with a strong focus on **clean architecture and separation of concerns**.
+This project is the fourth part of the E-Commerce Platform Workshop Series. In Part 4, the backend evolves into a complete RESTful web service by introducing:
 
-The system models a complete e-commerce flow including:
-
-- Customer management
-- Product catalog with categories
-- Promotion-based pricing
-- Order processing with stock validation
-
-It emphasizes **business logic encapsulation inside service layers**, while keeping entities and repositories isolated from the API layer.
+- REST Controllers
+- Request validation with `@Valid`
+- Structured HTTP responses using `ResponseEntity`
+- Global exception handling
+- Interactive API documentation with **Swagger UI (SpringDoc OpenAPI)**
 
 ---
 
@@ -23,6 +20,8 @@ It emphasizes **business logic encapsulation inside service layers**, while keep
 The project follows a layered architecture:
 
 ```
+Controller Layer
+        ↓
 Service Layer (business logic)
         ↓
 Mapper Layer (DTO ↔ Entity conversion)
@@ -101,6 +100,8 @@ Database
 ---
 
 ## 📌 Workshop Documents
+[Workshop Document - Part 4](SpringBoot-DataJPA-REST-Workshop-Part4.md)
+
 [Workshop Document - Part 3](SpringBoot-DataJPA-Service-Layer-Workshop-Part3.md)
 
 [Workshop Document - Part 2](SpringBoot-DataJPA-Workshop-Part2.md)
@@ -126,6 +127,7 @@ Database
 ```
 com.example.ecommerce
 ├── entity
+├── controller
 ├── exception
 ├── repository
 ├── service
@@ -146,8 +148,8 @@ com.example.ecommerce
 ## 🚀 How to Run
 
 ```
-git clone https://github.com/jayani-athukorala/jpa-ecommerce-system.git
-cd jpa-ecommerce-system
+git clone https://github.com/HansMalm/E-Commerce-Platform-Workshop-Part-4.git
+cd E-Commerce-Platform-Workshop-Part-4
 
 docker compose up -d
 mvn clean install
