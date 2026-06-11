@@ -4,6 +4,7 @@ import com.example.ecommerce.dto.request.CustomerRequest;
 import com.example.ecommerce.dto.response.CustomerResponse;
 import com.example.ecommerce.service.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
