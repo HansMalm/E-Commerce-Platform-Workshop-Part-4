@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for managing products.
+ * Provides endpoints for creating, retrieving, updating and deleting products.
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/products")
@@ -18,24 +23,37 @@ public class ProductController {
 
     private final ProductService productService;
 
-    // POST /api/vi/products :  Create a new product
+    /**
+     * Creates a new product.
+     *
+     * @param request the product details to create
+     * @return the created product with HTTP 201 status
+     */
+
     @PostMapping
     public ResponseEntity<ProductResponse> create(
             @Valid @RequestBody ProductRequest request) {
         ProductResponse response = productService.create(request);
-
-        // Return 201 Created with the created product
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // Get /api/vi/products :  Get all products
+    /**
+     * Retrieves all products.
+     * @return list of all products with HTTP 200 status
+     */
+
     @GetMapping
     public ResponseEntity<List<ProductResponse>> findAll() {
         List<ProductResponse> products = productService.findAll();
         return ResponseEntity.ok(products);
     }
 
-    // GET /api/vi/products/search?name=...  :  Search products by name
+    /**
+     * Searches products by name (case-insensitive)
+     *
+     * @param name the search term to filter products by name
+     * @return list of matching products with HTTP 200 status
+     */
     @GetMapping("/search")
     public ResponseEntity<List<ProductResponse>> searchByName(
             @RequestParam String name ) {
@@ -43,14 +61,25 @@ public class ProductController {
         return ResponseEntity.ok(results);
     }
 
-    // Get /api/v1/products/{id} :  Find product by ID
+    /**
+     * Finds product by its ID.
+     *
+     * @param id the ID of the product to retrieve
+     * @return the found product with HTTP 200 status
+     */
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> findById(@PathVariable Long id) {
         ProductResponse response = productService.findById(id);
         return ResponseEntity.ok(response);
     }
 
-    // PUT avi/v1/products/{id} :  Update product
+    /**
+     * Updates an existing product.
+     *
+     * @param id the ID of the product to update
+     * @param request the new product details
+     * @return the updates product with HTTP 200 status
+     */
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponse> update(
             @PathVariable Long id,
@@ -59,12 +88,15 @@ public class ProductController {
         return ResponseEntity.ok(updated);
     }
 
-    // DELETE /api/v1/products{id} : Delete product
+    /**
+     * Deletes a product by its ID.
+     *
+     * @param id the ID of the product to delete
+     * @return HTTP 204 no Content on successful deletion
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
-
-        // 204 No Content = successful delete
         return ResponseEntity.noContent().build();
     }
 
