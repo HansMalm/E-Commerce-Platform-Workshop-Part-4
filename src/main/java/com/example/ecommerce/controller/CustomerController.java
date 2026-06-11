@@ -20,6 +20,12 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
+    /**
+     * Creates a new customer in the system.
+     *
+     * @param customerRequest the customer data used for registration
+     * @return the created customer along with HTTP 201 Created
+     */
     @PostMapping
     @Operation(summary = "Create a new customer")
     public ResponseEntity<CustomerResponse> register(@Valid @RequestBody CustomerRequest customerRequest){
@@ -32,8 +38,14 @@ public class CustomerController {
                 .body(customerResponse);
     }
 
+    /**
+     * Retrieves a customer by its unique identifier.
+     *
+     * @param id the customer ID
+     * @return the customer details
+     */
     @GetMapping("/{id}")
-    @Operation(summary = "Find a customer")
+    @Operation(summary = "Get customer by ID")
     public ResponseEntity<CustomerResponse> findById(@PathVariable @Positive Long id){
         IO.println("Id: "+id);
 
@@ -44,6 +56,13 @@ public class CustomerController {
                 .body(customerResponse);
     }
 
+    /**
+     * Updates an existing customer.
+     *
+     * @param id the ID of the customer to update
+     * @param customerRequest the updated customer information
+     * @return the updated customer details
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing customer")
     public  ResponseEntity<CustomerResponse> update(@PathVariable Long id, @Valid @RequestBody CustomerRequest customerRequest){
