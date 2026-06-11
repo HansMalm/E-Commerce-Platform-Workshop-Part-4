@@ -32,7 +32,12 @@ public class CategoryController {
 
 
 
-
+    /**
+     * Creates a new category.
+     *
+     * @param request the category request containing the name
+     * @return ResponseEntity containing the created CategoryResponse with status 201 Created
+     */
 
     @PostMapping
     @Operation(summary = "Create a new category")
@@ -42,6 +47,12 @@ public class CategoryController {
         CategoryResponse categoryResponse = categoryService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponse);
     }
+
+    /**
+     * Retrieves all categories.
+     *
+     * @return ResponseEntity containing list of CategoryResponse with status 200 OK
+     */
     @GetMapping
     @ApiResponse(responseCode = "200", description = "OK")
     public ResponseEntity<List<CategoryResponse>>findAll(){
