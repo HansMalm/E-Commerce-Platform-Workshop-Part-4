@@ -3,10 +3,7 @@ package com.example.ecommerce.service.impl;
 import com.example.ecommerce.dto.request.OrderItemRequest;
 import com.example.ecommerce.dto.request.OrderRequest;
 import com.example.ecommerce.dto.response.OrderResponse;
-import com.example.ecommerce.entity.Customer;
-import com.example.ecommerce.entity.Order;
-import com.example.ecommerce.entity.OrderItem;
-import com.example.ecommerce.entity.Product;
+import com.example.ecommerce.entity.*;
 import com.example.ecommerce.exception.ResourceNotFoundException;
 import com.example.ecommerce.mapper.OrderMapper;
 import com.example.ecommerce.repository.CustomerRepository;
@@ -35,53 +32,67 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponse placeOrder(OrderRequest orderRequest) {
-        if (orderRequest == null) throw new IllegalArgumentException("OrderRequest cannot be null!");
 
-        // Find the customer
+        if (orderRequest == null || orderRequest.items() == null || orderRequest.items().isEmpty()) {
+            throw new IllegalArgumentException("OrderRequest or items cannot be null/empty");
+        }
+
+        // 1. Find customer
         Customer customer = customerRepository.findById(orderRequest.customerId())
-                .orElseThrow(()-> new ResourceNotFoundException("Customer not found with id "+orderRequest.customerId()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Customer not found with id " + orderRequest.customerId()));
 
+        // 2. Create order
         Order order = new Order();
         order.setCustomer(customer);
+        order.setStatus(OrderStatus.PENDING);
 
         List<OrderItem> orderItems = new ArrayList<>();
+        BigDecimal totalAmount = BigDecimal.ZERO;
 
+        // 3. Process items
         for (OrderItemRequest itemRequest : orderRequest.items()) {
 
-            // Find the Product for each requested item
             Product product = productRepository.findById(itemRequest.productId())
                     .orElseThrow(() ->
-                            new ResourceNotFoundException(
-                                    "Product not found with id " + itemRequest.productId()));
+                            new ResourceNotFoundException("Product not found with id " + itemRequest.productId()));
 
             // Stock validation
             if (product.getStock() < itemRequest.quantity()) {
                 throw new IllegalArgumentException(
-                        "Insufficient stock for product with id " + product.getName());
+                        "Insufficient stock for product: " + product.getName());
             }
 
-            // Apply any active Promotion.
-            BigDecimal discountPrice = promotionService.calculateDiscount(product);
+            // Discount calculation
+            BigDecimal discount = promotionService.calculateDiscount(product);
+            BigDecimal finalPrice = product.getPrice().subtract(discount);
 
-            BigDecimal finalPrice = product.getPrice().subtract(discountPrice);
+            // Order item
+            OrderItem item = new OrderItem();
+            item.setOrder(order);
+            item.setProduct(product);
+            item.setQuantity(itemRequest.quantity());
+            item.setPriceAtPurchase(finalPrice);
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setProduct(product);
-            orderItem.setQuantity(itemRequest.quantity());
-            orderItem.setPriceAtPurchase(finalPrice);
-            orderItem.setOrder(order);
+            orderItems.add(item);
 
-            orderItems.add(orderItem);
-
-            // Stock update
+            // Update stock
             product.setStock(product.getStock() - itemRequest.quantity());
-            productRepository.save(product);
+
+            // Total calculation
+            totalAmount = totalAmount.add(
+                    finalPrice.multiply(BigDecimal.valueOf(itemRequest.quantity()))
+            );
         }
 
-        // Save the Order with its items.
+        // 4. Attach items + total
         order.setItems(orderItems);
+        order.setTotalAmount(totalAmount);
+
+        // 5. Save order
         Order savedOrder = orderRepository.save(order);
 
+        // 6. Response mapping
         return orderMapper.toResponse(savedOrder);
-     }
+    }
 }
