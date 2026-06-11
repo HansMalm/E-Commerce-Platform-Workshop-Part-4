@@ -1,5 +1,6 @@
 package com.example.ecommerce.controller;
 
+import com.example.ecommerce.dto.request.CategoryRequest;
 import com.example.ecommerce.dto.response.CategoryResponse;
 import com.example.ecommerce.service.CategoryService;
 import org.springframework.http.HttpStatus;

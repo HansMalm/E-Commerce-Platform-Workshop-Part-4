@@ -59,4 +59,41 @@ public class ProductServiceImpl implements ProductService {
                 .map(productMapper::toResponse)
                 .toList();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProductResponse findById(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Product not found with id: " + id));
+        return productMapper.toResponse(product);
+
+    }
+
+    @Override
+    @Transactional
+    public ProductResponse update(Long id, ProductRequest productRequest) {
+        Product existing = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+
+        Category category = categoryRepository.findById(productRequest.categoryId())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Category not found with id: " + productRequest.categoryId()));
+
+        existing.setName(productRequest.name());
+        existing.setPrice(productRequest.price());
+        existing.setCategory(category);
+
+        Product updated = productRepository.save(existing);
+        return productMapper.toResponse(updated);
+    }
+
+    @Override
+    @Transactional
+    public void delete (Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                     "Product not found with id: " + id));
+        productRepository.delete(product);
+    }
 }
