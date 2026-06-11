@@ -9,4 +9,8 @@ public interface ProductService {
     ProductResponse create(ProductRequest productRequest);
     List<ProductResponse> findAll();
     List<ProductResponse> searchByName(String name);
+
+    ProductResponse findById(Long id);
+    ProductResponse update (Long id, ProductRequest productRequest);
+    void delete(Long id);
 }
