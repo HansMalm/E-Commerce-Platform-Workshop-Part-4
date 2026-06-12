@@ -3,6 +3,7 @@ package com.example.ecommerce.controller;
 import com.example.ecommerce.dto.request.OrderRequest;
 import com.example.ecommerce.dto.response.OrderResponse;
 import com.example.ecommerce.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Manjula
  * @version 1.0
  */
+@Tag(name = "Order Controller", description = "APIs for managing orders")
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor

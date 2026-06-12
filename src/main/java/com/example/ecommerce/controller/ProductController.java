@@ -3,6 +3,7 @@ package com.example.ecommerce.controller;
 import com.example.ecommerce.dto.request.ProductRequest;
 import com.example.ecommerce.dto.response.ProductResponse;
 import com.example.ecommerce.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import java.util.List;
  * Provides endpoints for creating, retrieving, updating and deleting products.
  */
 
+@Tag(name = "Product Controller", description = "APIs for managing products")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/products")
